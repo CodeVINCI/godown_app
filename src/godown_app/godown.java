@@ -153,6 +153,7 @@ public class godown extends javax.swing.JFrame {
      int index = jTable1.getSelectedRow();
      TableModel model = jTable1.getModel();
      Edit edit = new Edit(model,index);
+     dispose();
      edit.setVisible(rootPaneCheckingEnabled);
       // TODO add your handling code here:
     }//GEN-LAST:event_jTable1MouseClicked
@@ -165,10 +166,10 @@ public class godown extends javax.swing.JFrame {
       try {
          Class.forName("org.postgresql.Driver");
          Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/godown_data","vinci","Abhishek1706");
-         String prestm = "SELECT * FROM itemlog";
+         String prestm = "SELECT * FROM itemlog ORDER BY id";
          PreparedStatement stmt = con.prepareStatement(prestm);
          ResultSet Rs = stmt.executeQuery();
-        
+        System.out.println(Rs);
          jTable1.setModel(DbUtils.resultSetToTableModel(Rs));
         }
          catch(Exception e){

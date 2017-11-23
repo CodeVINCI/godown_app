@@ -90,7 +90,7 @@ public class Unavailable extends javax.swing.JFrame {
       try {
          Class.forName("org.postgresql.Driver");
          Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/godown_data","vinci","Abhishek1706");
-         String prestm = "SELECT * FROM itemlog WHERE status= false";
+         String prestm = "SELECT * FROM itemlog WHERE status= false ORDER BY id";
          PreparedStatement stmt = con.prepareStatement(prestm);
          ResultSet Rs = stmt.executeQuery();
         

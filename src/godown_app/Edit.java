@@ -4,6 +4,12 @@
  * and open the template in the editor.
  */
 package godown_app;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.table.TableModel;
 
 /**
@@ -138,15 +144,24 @@ public class Edit extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+      delete();
+        godown g = new godown();
+    g.setVisible(true); 
+        dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+      update();
+        godown g = new godown();
+    g.setVisible(true); 
+        dispose();
+                // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+     godown gd = new godown();
+     gd.setVisible(true); 
+        dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
@@ -156,6 +171,68 @@ public class Edit extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
+    void delete()
+    {
+     try {
+          
+         Class.forName("org.postgresql.Driver");
+         Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/godown_data","vinci","Abhishek1706");
+         String prestm = "DELETE FROM itemlog WHERE id="+m.getValueAt(ind,0).toString();
+         updateids(Integer.parseInt(m.getValueAt(ind,0).toString()));
+         PreparedStatement stmt = con.prepareStatement(prestm);
+         stmt.executeUpdate();
+    //System.out.println(prestm);
+      }
+      catch(Exception e)
+      {
+      final JPanel j = new JPanel();
+        JOptionPane.showMessageDialog(j,e.toString());
+      }
+    }
+    void updateids(int i)
+    {
+       try {
+         int current = Integer.parseInt(m.getValueAt(ind,0).toString());
+         int n = m.getRowCount()-current;
+         Class.forName("org.postgresql.Driver");
+         Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/godown_data","vinci","Abhishek1706");
+         current= current+1;
+         while(n>0)
+         {
+         String prestm = "UPDATE itemlog SET id="+Integer.toString(current-1)+" WHERE id="+Integer.toString(current);
+         PreparedStatement stmt = con.prepareStatement(prestm);
+         stmt.executeUpdate();
+         n--;
+         current++;
+         }
+    //System.out.println(prestm);
+      }
+      catch(Exception e)
+      {
+      final JPanel j = new JPanel();
+        JOptionPane.showMessageDialog(j,e.toString());
+      }
+    }
+    void update()
+    {
+      try {
+          boolean status=true;
+                 if(Integer.parseInt(jTextField2.getText())<=0){
+                     status=false;
+                         }
+         Class.forName("org.postgresql.Driver");
+         Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/godown_data","vinci","Abhishek1706");
+         String prestm = "UPDATE itemlog SET name='"+jTextField1.getText()+"',quantity="+jTextField2.getText()+",status="+String.valueOf(status)+" WHERE id="+m.getValueAt(ind,0).toString();
+         PreparedStatement stmt = con.prepareStatement(prestm);
+         stmt.executeUpdate();
+    //System.out.println(prestm);
+      }
+      catch(Exception e)
+      {
+      final JPanel j = new JPanel();
+        JOptionPane.showMessageDialog(j,e.toString());
+      }
+    }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
