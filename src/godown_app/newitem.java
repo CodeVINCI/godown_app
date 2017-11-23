@@ -1,6 +1,8 @@
 package godown_app;
 import javax.swing.JPanel;
 import javax.swing.JOptionPane;
+import java.sql.*;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -121,11 +123,15 @@ public class newitem extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-      addToDB();        // TODO add your handling code here:
+      addToDB(); 
+      godown gd = new godown();
+      gd.setVisible(true);// TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-   dispose();// TODO add your handling code here:
+   dispose();
+godown gd = new godown();
+      gd.setVisible(true);// TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -135,7 +141,8 @@ public class newitem extends javax.swing.JFrame {
     {
       String name = jTextField1.getText();
       String quantity = jTextField2.getText();
-      int qua;
+      int qua=0;
+      boolean status = false;
       try{
          qua = Integer.parseInt(quantity);
        }
@@ -145,6 +152,33 @@ public class newitem extends javax.swing.JFrame {
           final JPanel j = new JPanel();
         JOptionPane.showMessageDialog(j,e.toString());
       }
+      if (qua > 0){status = true;}
+      try {
+         Class.forName("org.postgresql.Driver");
+         Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/godown_data","vinci","Abhishek1706");
+         String prestm = "SELECT MAX(id) FROM itemlog";
+         PreparedStatement stmt = con.prepareStatement(prestm);
+         ResultSet Rs = stmt.executeQuery();
+         int m = 0;
+         while(Rs.next())
+         {
+         m = Rs.getInt(1)+1;
+         }
+         
+         String stm = "INSERT INTO itemlog VALUES ("+Integer.toString(m)+",'"+ name + "'," + Integer.toString(qua)+","+ String.valueOf(status) +")";
+         PreparedStatement statm = con.prepareStatement(stm);
+         statm.executeUpdate();
+         dispose();
+         
+      }
+      catch(Exception e){
+          final JPanel j = new JPanel();
+        JOptionPane.showMessageDialog(j,e.toString());
+      }
+      
+      
+      
+      
            
     }
     public static void main(String args[]) {
